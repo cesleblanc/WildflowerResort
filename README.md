@@ -1,4 +1,4 @@
-# WildflowerResort
+# Wildflower Resort
 Final Project for SER322
 
 ## Application Domain and Description:
