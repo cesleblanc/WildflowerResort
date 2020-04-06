@@ -7,7 +7,7 @@ Users can query the database to find available rooms of different types, such as
 
 ### The hotel database will handle the following:
 
-###List of room
+#### List of room
 - Cleaned/Dirty
 - Vacant/Non-Vacant
 - Booking dates
@@ -15,7 +15,7 @@ Users can query the database to find available rooms of different types, such as
 - One/two beds
 - Penthouse
 
-### List of event rooms
+#### List of event rooms
 - Conference Room 1
 - Conference Room 2
 - Wedding
