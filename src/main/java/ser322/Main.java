@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
 
 public class Main   {
     static final String DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -16,9 +17,18 @@ public class Main   {
     static String USER;
     static String PASS;
     static final String credentialsPath = "credentials.txt";
+    static Connection conn;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException, ParseException {
         initializeDatabase();
+        Controller controller = new Controller();
+        controller.selectGuestInfo(conn);
+        controller.selectReservationInfo(conn);
+        controller.selectRoomTypes(conn);
+        //controller.insertGuest(conn, 837, "Porter", "Robinson", "prob@gmail.com", "8467387266");
+        controller.insertCreditCard(conn, 837, "7464746474647464", 756, 10, 3, "Porter", "Robinson");
+        controller.createReservation(conn, 609, "7464746474647464", 2, 437.67f, "2020/10/1", "2020/12/13");
+        conn.close();
     }
 
     /**
@@ -52,13 +62,13 @@ public class Main   {
     }
 
     /**
-     * The initializeDatabase method initializes the WINDFLOWER schema.
+     * The initializeDatabase method initializes the WILDFLOWER schema.
      * If the schema doesn't exist, it is created.
      * Otherwise, nothing occurs.
      */
     public static void initializeDatabase(){
         login();
-        Connection conn = null;
+        conn = null;
         Statement stmt = null;
         try{
             Class.forName(DRIVER);
@@ -70,12 +80,12 @@ public class Main   {
             stmt.executeUpdate(sql);
         }catch(Exception e){
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 if (stmt != null)
                     stmt.close();
                 if (conn != null)
-                    conn.close();
+                    //conn.close();
                 System.out.println("Successfully connected to Windflower Resort Database System.");
             } catch (SQLException e) {
                 e.printStackTrace();
