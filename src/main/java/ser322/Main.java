@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
 
 public class Main   {
     static final String DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -18,10 +19,15 @@ public class Main   {
     static final String credentialsPath = "credentials.txt";
     static Connection conn;
 
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, ParseException {
         initializeDatabase();
         Controller controller = new Controller();
-        controller.query1(conn);
+        controller.selectGuestInfo(conn);
+        controller.selectReservationInfo(conn);
+        controller.selectRoomTypes(conn);
+        //controller.insertGuest(conn, 837, "Porter", "Robinson", "prob@gmail.com", "8467387266");
+        controller.insertCreditCard(conn, 837, "7464746474647464", 756, 10, 3, "Porter", "Robinson");
+        controller.createReservation(conn, 609, "7464746474647464", 2, 437.67f, "2020/10/1", "2020/12/13");
         conn.close();
     }
 
