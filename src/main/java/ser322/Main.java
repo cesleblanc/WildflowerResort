@@ -66,7 +66,7 @@ public class Main   {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             System.out.println("Connected! Gathering data...");
             stmt = conn.createStatement();
-            String sql = "CREATE SCHEMA IF NOT EXISTS WINDFLOWER";
+            String sql = "CREATE SCHEMA IF NOT EXISTS WILDFLOWER";
             stmt.executeUpdate(sql);
         }catch(Exception e){
             e.printStackTrace();
