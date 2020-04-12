@@ -16,9 +16,13 @@ public class Main   {
     static String USER;
     static String PASS;
     static final String credentialsPath = "credentials.txt";
+    static Connection conn;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         initializeDatabase();
+        Controller controller = new Controller();
+        controller.query1(conn);
+        conn.close();
     }
 
     /**
@@ -52,13 +56,13 @@ public class Main   {
     }
 
     /**
-     * The initializeDatabase method initializes the WINDFLOWER schema.
+     * The initializeDatabase method initializes the WILDFLOWER schema.
      * If the schema doesn't exist, it is created.
      * Otherwise, nothing occurs.
      */
     public static void initializeDatabase(){
         login();
-        Connection conn = null;
+        conn = null;
         Statement stmt = null;
         try{
             Class.forName(DRIVER);
@@ -70,12 +74,12 @@ public class Main   {
             stmt.executeUpdate(sql);
         }catch(Exception e){
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 if (stmt != null)
                     stmt.close();
                 if (conn != null)
-                    conn.close();
+                    //conn.close();
                 System.out.println("Successfully connected to Windflower Resort Database System.");
             } catch (SQLException e) {
                 e.printStackTrace();
