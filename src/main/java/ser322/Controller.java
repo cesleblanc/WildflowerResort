@@ -5,8 +5,20 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * The following class is used as a controller to the current resort database.
+ * Users may select guests, registration, and room information as you would
+ * expect from a hotel booking application.
+ * @author Team 13, SER322 (Cesar, Emily, Hannah, Brandon)
+ */
 public class Controller {
 
+    /**
+     * Pulls out all guests' information from Wildflower Resort Database, including:
+     *  Guest ID, First Name, Last Name, Email, and Phone Number
+     * @param connection Connection to SQL server.
+     * @throws SQLException No SQL server found/error.
+     */
     public static void selectGuestInfo(Connection connection) throws SQLException {
 
         Statement s = connection.createStatement(); //Creating statement
@@ -31,6 +43,12 @@ public class Controller {
         }
     }
 
+    /**
+     * Pulls all reservation information from WRD, including:
+     * Guest ID, First Name, Reservation ID, Credit Card Information, and Room ID
+     * @param connection Connection to SQL server.
+     * @throws SQLException No SQL server found/error.
+     */
     public static void selectReservationInfo (Connection connection) throws SQLException {
 
         Statement s = connection.createStatement(); //Creating statement
@@ -57,6 +75,12 @@ public class Controller {
         }
     }
 
+    /**
+     * Pulls the types of rooms available at the Wildflower Resort, including:
+     * Room ID, Room Type, Max Occupancy, and Smoking (Y/N)
+     * @param connection Connection to SQL server.
+     * @throws SQLException No SQL server found/error.
+     */
     public static void selectRoomTypes (Connection connection) throws SQLException {
 
         Statement s = connection.createStatement(); //Creating statement
@@ -85,6 +109,16 @@ public class Controller {
         }
     }
 
+    /**
+     * Inserts a new guest into the Wildflower Database
+     * @param connection Connection to database.
+     * @param gid guest id
+     * @param fname first name
+     * @param lname last name
+     * @param email email
+     * @param pnum phone number
+     * @throws SQLException
+     */
     public static void insertGuest (Connection connection, int gid, String fname,
                                     String lname, String email, String pnum) throws SQLException {
 
@@ -101,6 +135,18 @@ public class Controller {
         System.out.println("SUCCESS");
     }
 
+    /**
+     * Inserts credit card information. You must first have a guest created to do this.
+     * @param connection Connection to database.
+     * @param gid guest id
+     * @param cnum credit card number
+     * @param cvv cvv
+     * @param expm expiration month
+     * @param expd expiration day
+     * @param fname first name
+     * @param lname last name
+     * @throws SQLException Check for connection/error
+     */
     public static void insertCreditCard (Connection connection, int gid, String cnum,
                                          int cvv, int expm, int expd, String fname, String lname) throws SQLException {
 
@@ -120,6 +166,18 @@ public class Controller {
         System.out.println("SUCCESS");
     }
 
+    /**
+     * Creates a new reservation in the Wildflower Resort Database
+     * @param connection Connection to database
+     * @param resid reservation ID
+     * @param cnum credit card number
+     * @param roomid room id (The actual room number is used)
+     * @param price price of stay (total)
+     * @param sdate first day
+     * @param edate last day
+     * @throws SQLException Checks for connectivity.
+     * @throws ParseException Checks for correct parsing.
+     */
     public static void createReservation (Connection connection, int resid, String cnum,
                                           int roomid, float price, String sdate, String edate)
             throws SQLException, ParseException {
@@ -145,6 +203,4 @@ public class Controller {
         p.executeUpdate();
         System.out.println("SUCCESS");
     }
-
-
 }

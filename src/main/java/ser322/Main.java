@@ -11,6 +11,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
 
+/**
+ * Runner class for communication with Wildflower Resort Database.
+ * @author Team 13, SER322 (Cesar, Emily, Hannah, Brandon)
+ */
 public class Main   {
     static final String DRIVER = "com.mysql.cj.jdbc.Driver";
     static String DB_URL;
