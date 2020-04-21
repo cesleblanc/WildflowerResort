@@ -1,5 +1,6 @@
 package main.java.ser322;
 
+import javax.swing.SwingUtilities;
 import java.sql.SQLException;
 <<<<<<< Updated upstream
 import java.sql.Statement;
@@ -21,6 +22,7 @@ public class Main   {
 =======
     public static void main(String[] args) throws SQLException, ParseException {
         Controller.initializeDatabase();
+<<<<<<< Updated upstream
 //        Controller controller = new Controller();
 //        Guest.createGuestTable(getConnection());
 //        Guest.selectGuestInfo(getConnection());
@@ -65,6 +67,13 @@ public class Main   {
             }
         }
 =======
+>>>>>>> Stashed changes
+=======
+        SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                new AppFrame();
+            }
+        });
 >>>>>>> Stashed changes
     }
 }
