@@ -1,7 +1,5 @@
-package ser322;
+package main.java.ser322;
 
-
-public class Controller {
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,6 +13,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
+
 
 /**
  * The following class is used as a controller to the current resort database.
