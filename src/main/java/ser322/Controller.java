@@ -69,11 +69,12 @@ public class Controller {
      * sql folder.
      */
     static void createAllTables(){
+        Guest.createTable(getConnection());
+        RoomType.createTable(getConnection());
         Amenity.createTable(getConnection());
         CreditCard.createTable(getConnection());
-        Guest.createTable(getConnection());
         Reservation.createTable(getConnection());
-        RoomType.createTable(getConnection());
+
     }
 
     /**
@@ -177,6 +178,7 @@ public class Controller {
                 try {
                     stmt.execute(line);
                 } catch (SQLIntegrityConstraintViolationException e){
+                    // e.printStackTrace();
                     // Assuming all integrity constraints are met,
                     // no side effects should occur
                 }
