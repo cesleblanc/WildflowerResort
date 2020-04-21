@@ -1,9 +1,20 @@
-package main.java.ser322;
+package ser322;
 
-import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
+public class Controller {
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.Statement;
 
 /**
  * The following class is used as a controller to the current resort database.
@@ -12,195 +23,177 @@ import java.util.Date;
  * @author Team 13, SER322 (Cesar, Emily, Hannah, Brandon)
  */
 public class Controller {
+    static final String DRIVER = "com.mysql.cj.jdbc.Driver";
+    static String DB_URL;
+    static String USER;
+    static String PASS;
+    static final String credentialsPath = "credentials.txt";
 
     /**
-     * Pulls out all guests' information from Wildflower Resort Database, including:
-     *  Guest ID, First Name, Last Name, Email, and Phone Number
-     * @param connection Connection to SQL server.
-     * @throws SQLException No SQL server found/error.
+     * Creates a table in the database by executing SQL found in the sql folder.
+     * @param conn connection to the database
+     * @param createTableReservationSql path to the sql file
      */
-    public static void selectGuestInfo(Connection connection) throws SQLException {
-
-        Statement s = connection.createStatement(); //Creating statement
-        ResultSet r = s.executeQuery(
-                "SELECT GUESTID, FIRSTNAME, LASTNAME, EMAIL, PHONENUM" +
-                        " FROM GUEST"); //Result from statement
-
-        //Printing resulting table to console
-        System.out.printf("%s\n%s\n%s\n",
-                " _____________________________________________________________________________________________________________",
-                "|ID                   |First Name           |Last Name            |Email                |Phone Number         |",
-                "|---------------------|---------------------|---------------------|---------------------|---------------------|");
-        while(r.next()) {
-            System.out.printf("| %-20s| %-20s| %-20s| %-20s| %-20s|\n",
-                    r.getString(1),
-                    r.getString(2),
-                    r.getString(3),
-                    r.getString(4),
-                    r.getString(5)
-            );
-            System.out.println("|---------------------|---------------------|---------------------|---------------------|---------------------|");
-        }
-    }
-
-    /**
-     * Pulls all reservation information from WRD, including:
-     * Guest ID, First Name, Reservation ID, Credit Card Information, and Room ID
-     * @param connection Connection to SQL server.
-     * @throws SQLException No SQL server found/error.
-     */
-    public static void selectReservationInfo (Connection connection) throws SQLException {
-
-        Statement s = connection.createStatement(); //Creating statement
-        ResultSet r = s.executeQuery(
-                "SELECT GUEST.GUESTID, GUEST.FIRSTNAME, R.RESERVATIONID, R.CARDNUM, R.ROOMID " +
-                        "FROM GUEST, RESERVATION AS R, CREDIT_CARD " +
-                        "WHERE CREDIT_CARD.GUESTID = GUEST.GUESTID " +
-                        "AND CREDIT_CARD.CARDNUM = R.CARDNUM "); //Result from statement
-
-        //Printing resulting table to console
-        System.out.printf("%s\n%s\n%s\n",
-                " _____________________________________________________________________________________________________________",
-                "|ID                   |First Name           |Reservation ID       |Credit Card          |Room Number          |",
-                "|---------------------|---------------------|---------------------|---------------------|---------------------|");
-        while(r.next()) {
-            System.out.printf("| %-20s| %-20s| %-20s| %-20s| %-20s|\n",
-                    r.getString(1),
-                    r.getString(2),
-                    r.getString(3),
-                    r.getString(4),
-                    r.getString(5)
-            );
-            System.out.println("|---------------------|---------------------|---------------------|---------------------|---------------------|");
-        }
-    }
-
-    /**
-     * Pulls the types of rooms available at the Wildflower Resort, including:
-     * Room ID, Room Type, Max Occupancy, and Smoking (Y/N)
-     * @param connection Connection to SQL server.
-     * @throws SQLException No SQL server found/error.
-     */
-    public static void selectRoomTypes (Connection connection) throws SQLException {
-
-        Statement s = connection.createStatement(); //Creating statement
-        ResultSet r = s.executeQuery(
-                "SELECT ROOMID, ROOMTYPE, MAXOCCUPANCY, ISSMOKING FROM ROOMTYPE "); //Result from statement
-
-        //Printing resulting table to console
-        System.out.printf("%s\n%s\n%s\n",
-                " _______________________________________________________________________________________",
-                "|ROOM ID              |ROOMTYPE             |MAXOCCUPANCY         |SMOKING?             |",
-                "|---------------------|---------------------|---------------------|---------------------|");
-        while(r.next()) {
-
-            String smoking = "No";
-            if (r.getString(4).equals("1")) {
-                smoking = "Yes";
+    static void createTable(Connection conn, String createTableReservationSql) {
+        Statement stmt = null;
+        StringBuilder sql = new StringBuilder();
+        try {
+            stmt = conn.createStatement();
+            File file = new File(createTableReservationSql);
+            FileInputStream fis = new FileInputStream(file);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            String line;
+            while((line = br.readLine()) != null){
+                sql.append(line);
             }
-
-            System.out.printf("| %-20s| %-20s| %-20s| %-20s|\n",
-                    r.getString(1),
-                    r.getString(2),
-                    r.getString(3),
-                    smoking
-            );
-            System.out.println("|---------------------|---------------------|---------------------|---------------------|");
+            br.close();
+            stmt.executeUpdate(sql.toString());
+        } catch (SQLException | IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null)
+                    stmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     /**
-     * Inserts a new guest into the Wildflower Database
-     * @param connection Connection to database.
-     * @param gid guest id
-     * @param fname first name
-     * @param lname last name
-     * @param email email
-     * @param pnum phone number
-     * @throws SQLException
+     * Helper method for initializeDatabase()
+     * It creates all tables in the database provided they
+     * do not already exist by executing code found in the
+     * sql folder.
      */
-    public static void insertGuest (Connection connection, int gid, String fname,
-                                    String lname, String email, String pnum) throws SQLException {
-
-        PreparedStatement p = connection.prepareStatement( //Creating statement
-                "INSERT INTO GUEST (GUESTID, FIRSTNAME, LASTNAME, EMAIL, PHONENUM) VALUES (?, ?, ?, ?, ?)");
-
-        p.setInt(1, gid);
-        p.setString(2, fname);
-        p.setString(3, lname);
-        p.setString(4, email);
-        p.setString(5, pnum);
-
-        p.executeUpdate();
-        System.out.println("SUCCESS");
+    static void createAllTables(){
+        Amenity.createTable(getConnection());
+        CreditCard.createTable(getConnection());
+        Guest.createTable(getConnection());
+        Reservation.createTable(getConnection());
+        RoomType.createTable(getConnection());
     }
 
     /**
-     * Inserts credit card information. You must first have a guest created to do this.
-     * @param connection Connection to database.
-     * @param gid guest id
-     * @param cnum credit card number
-     * @param cvv cvv
-     * @param expm expiration month
-     * @param expd expiration day
-     * @param fname first name
-     * @param lname last name
-     * @throws SQLException Check for connection/error
+     * The login method reads the credentials.txt file to connect to the main database.
+     * The credentials.txt file is located within the main project directory.
+     * The first line in the file is the database's url.
+     * The second line in the file is the user's username.
+     * The third line in the file is the user's password.
      */
-    public static void insertCreditCard (Connection connection, int gid, String cnum,
-                                         int cvv, int expm, int expd, String fname, String lname) throws SQLException {
-
-        PreparedStatement p = connection.prepareStatement( //Creating statement
-                "INSERT INTO CREDIT_CARD (GUESTID, CARDNUM, CVV, EXPM, EXPD, OWNERFIRSTNAME, OWNERLASTNAME) " +
-                        "VALUES (?, ?, ?, ?, ?, ?, ?)");
-
-        p.setInt(1, gid);
-        p.setString(2, cnum);
-        p.setInt(3, cvv);
-        p.setInt(4, expm);
-        p.setInt(5, expd);
-        p.setString(6, fname);
-        p.setString(7, lname);
-
-        p.executeUpdate();
-        System.out.println("SUCCESS");
+    public static void login(){
+        File file = new File(credentialsPath);
+        FileReader fr = null;
+        try {
+            fr = new FileReader(file);
+        } catch (FileNotFoundException e) {
+            System.out.println("Could not find " + file.getAbsolutePath());
+            e.printStackTrace();
+        }
+        try {
+            assert fr != null;
+            BufferedReader br = new BufferedReader(fr);
+            DB_URL = br.readLine();
+            USER = br.readLine();
+            PASS = br.readLine();
+            System.out.println("DATABASE URL: " + DB_URL);
+            System.out.println("USERNAME: " + USER);
+            System.out.println("PASSWORD: " + PASS);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
-     * Creates a new reservation in the Wildflower Resort Database
-     * @param connection Connection to database
-     * @param resid reservation ID
-     * @param cnum credit card number
-     * @param roomid room id (The actual room number is used)
-     * @param price price of stay (total)
-     * @param sdate first day
-     * @param edate last day
-     * @throws SQLException Checks for connectivity.
-     * @throws ParseException Checks for correct parsing.
+     * The initializeDatabase method initializes the WILDFLOWER schema
+     * and its tables. If the schema and tables don't exist, they are created.
+     * Otherwise, nothing occurs.
      */
-    public static void createReservation (Connection connection, int resid, String cnum,
-                                          int roomid, float price, String sdate, String edate)
-            throws SQLException, ParseException {
+    public static void initializeDatabase(){
+        login();
+        Connection conn = null;
+        Statement stmt = null;
+        try{
+            Class.forName(DRIVER);
+            System.out.println("Attempting to connect...");
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            System.out.println("Connected! Gathering data...");
+            stmt = conn.createStatement();
+            String sql = "CREATE SCHEMA IF NOT EXISTS WILDFLOWER";
+            stmt.executeUpdate(sql);
+            createAllTables();
+            insertDataValues();
+        }catch(Exception e){
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null)
+                    stmt.close();
+                if (conn != null)
+                    conn.close();
+                    System.out.println("Successfully connected to Windflower Resort Database System.");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-        PreparedStatement p = connection.prepareStatement( //Creating statement
-                "INSERT INTO RESERVATION (RESERVATIONID, CARDNUM, ROOMID, PRICE, STARTDATE, ENDDATE) VALUES (?, ?, ?, ?, ?, ?)");
+    /**
+     * The getConnection method gets a connection to the database
+     * Every time getConnection is used, there should be matching
+     * code to close the connection.
+     * @return Connection to the database
+     */
+    public static Connection getConnection() {
+        try {
+            return DriverManager.getConnection(DB_URL, USER, PASS);
+        } catch (SQLException e){
+            System.out.println("Unable to get a connection to the database.");
+            e.printStackTrace();
+            return null;
+        }
+    }
 
-        SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy/mm/dd");
-        java.util.Date date = sdf1.parse(sdate);
-        java.sql.Date sqlStartDate = new java.sql.Date(date.getTime());
-
-        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy/mm/dd");
-        java.util.Date date2 = sdf2.parse(sdate);
-        java.sql.Date sqlEndDate = new java.sql.Date(date2.getTime());
-
-        p.setInt(1, resid);
-        p.setString(2, cnum);
-        p.setInt(3, roomid);
-        p.setFloat(4, price);
-        p.setDate(5, sqlStartDate);
-        p.setDate(6, sqlEndDate);
-
-        p.executeUpdate();
-        System.out.println("SUCCESS");
+    /**
+     * Insert data from sql/insertions.sql into the database
+     */
+    public static void insertDataValues() {
+        Statement stmt = null;
+        Connection conn = null;
+        try {
+            conn = getConnection();
+            if (conn == null){
+                throw new Exception(new IOException());
+            }
+            stmt = conn.createStatement();
+            File file = new File("sql/insertions.sql");
+            FileInputStream fis = new FileInputStream(file);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader br = new BufferedReader(isr);
+            String line;
+            while((line = br.readLine()) != null){
+                try {
+                    stmt.execute(line);
+                } catch (SQLIntegrityConstraintViolationException e){
+                    // Assuming all integrity constraints are met,
+                    // no side effects should occur
+                }
+            }
+            br.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null)
+                    stmt.close();
+                if (conn != null)
+                    conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
