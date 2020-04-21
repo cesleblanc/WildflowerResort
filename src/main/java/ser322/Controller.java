@@ -1,8 +1,6 @@
-package ser322;
+package main.java.ser322;
 
-<<<<<<< Updated upstream
-public class Controller {
-=======
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -198,5 +196,4 @@ public class Controller {
             }
         }
     }
->>>>>>> Stashed changes
 }
