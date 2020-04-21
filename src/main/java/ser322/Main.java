@@ -1,16 +1,14 @@
 package main.java.ser322;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
+<<<<<<< Updated upstream
 import java.sql.Statement;
+=======
+import java.text.ParseException;
+>>>>>>> Stashed changes
 
 public class Main   {
+<<<<<<< Updated upstream
     static final String DRIVER = "com.mysql.cj.jdbc.Driver";
     static String DB_URL;
     static String USER;
@@ -20,37 +18,22 @@ public class Main   {
     public static void main(String[] args) {
         initializeDatabase();
     }
+=======
+    public static void main(String[] args) throws SQLException, ParseException {
+        Controller.initializeDatabase();
+//        Controller controller = new Controller();
+//        Guest.createGuestTable(getConnection());
+//        Guest.selectGuestInfo(getConnection());
+//        Reservation.selectReservationInfo(getConnection());
+//        controller.selectRoomTypes(getConnection());
+//        Guest.insertGuest(getConnection(), 837, "Porter", "Robinson", "prob@gmail.com", "8467387266");
+//        controller.insertCreditCard(getConnection(), 837, "7464746474647464", 756, 10, 3, "Porter", "Robinson");
+//        Reservation.createReservation(getConnection(), 609, "7464746474647464", 2, 437.67f, "2020/10/1", "2020/12/13");
+>>>>>>> Stashed changes
 
-    /**
-     * The login method reads the credentials.txt file to connect to the main database.
-     * The credentials.txt file is located within the main project directory.
-     * The first line in the file is the database's url.
-     * The second line in the file is the user's username.
-     * The third line in the file is the user's password.
-     */
-    public static void login(){
-        File file = new File(credentialsPath);
-        FileReader fr = null;
-        try {
-            fr = new FileReader(file);
-        } catch (FileNotFoundException e) {
-            System.out.println("Could not find " + file.getAbsolutePath());
-            e.printStackTrace();
-        }
-        try {
-            assert fr != null;
-            BufferedReader br = new BufferedReader(fr);
-            DB_URL = br.readLine();
-            USER = br.readLine();
-            PASS = br.readLine();
-            System.out.println("DATABASE URL: " + DB_URL);
-            System.out.println("USERNAME: " + USER);
-            System.out.println("PASSWORD: " + PASS);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+        AppFrame main = new AppFrame();
 
+<<<<<<< Updated upstream
     /**
      * The initializeDatabase method initializes the WINDFLOWER schema.
      * If the schema doesn't exist, it is created.
@@ -81,5 +64,7 @@ public class Main   {
                 e.printStackTrace();
             }
         }
+=======
+>>>>>>> Stashed changes
     }
 }
