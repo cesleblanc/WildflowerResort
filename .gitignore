@@ -29,3 +29,7 @@ out/production/WildflowerResort/main/java/ser322/sample.fxml
 src/.DS_Store
 src/main/.DS_Store
 src/main/java/.DS_Store
+
+#DB driver
+com.mysql.cj.jdbc.Driver.jar
+out

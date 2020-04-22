@@ -112,8 +112,15 @@ public class Controller {
      * and its tables. If the schema and tables don't exist, they are created.
      * Otherwise, nothing occurs.
      */
-    public static void initializeDatabase(){
-        login();
+    public static void initializeDatabase(String url, String name, String pass){
+
+        if(url.equalsIgnoreCase("default")) {
+            login();
+        } else {
+            DB_URL = url;
+            USER = name;
+            PASS = pass;
+        }
         Connection conn = null;
         Statement stmt = null;
         try{

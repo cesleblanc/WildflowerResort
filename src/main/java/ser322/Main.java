@@ -1,6 +1,9 @@
 package main.java.ser322;
 
+import jdk.swing.interop.SwingInterOpUtils;
+
 import javax.swing.SwingUtilities;
+import java.nio.file.attribute.UserDefinedFileAttributeView;
 import java.sql.SQLException;
 import java.text.ParseException;
 
@@ -13,7 +16,22 @@ public class Main   {
 
 
     public static void main(String[] args) throws SQLException, ParseException {
-        Controller.initializeDatabase();
+
+        if(args.length == 3) {
+            DB_URL = args[0];
+            USER = args[1];
+            PASS = args[2];
+
+            System.out.println("Custom credentials input");
+            System.out.println("\tURL:  " + DB_URL);
+            System.out.println("\tUSER: " + USER);
+            System.out.println("\tPASS: " + PASS + "\n");
+
+        } else {
+            System.out.println("Using default credentials");
+        }
+
+        Controller.initializeDatabase(DB_URL, USER, PASS);
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
