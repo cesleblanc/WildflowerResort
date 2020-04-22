@@ -7,6 +7,8 @@ import java.nio.file.attribute.UserDefinedFileAttributeView;
 import java.sql.SQLException;
 import java.text.ParseException;
 
+import static main.java.ser322.DebugMode.debug;
+
 public class Main   {
     static final String DRIVER = "com.mysql.cj.jdbc.Driver";
     static String DB_URL;
@@ -22,15 +24,15 @@ public class Main   {
             USER = args[1];
             PASS = args[2];
 
-            System.out.println("Custom credentials input:");
-            System.out.println("\tURL:  " + DB_URL);
-            System.out.println("\tUSER: " + USER);
-            System.out.println("\tPASS: " + PASS + "\n");
+            debug("Custom credentials input:");
+            debug("\tURL:  " + DB_URL);
+            debug("\tUSER: " + USER);
+            debug("\tPASS: " + PASS + "\n");
 
             Controller.initializeDatabase(DB_URL, USER, PASS);
 
         } else {
-            System.out.println("Using default credentials");
+            debug("Using default credentials");
 
             // These defaults will be overwritten in the Controller.login method
             Controller.initializeDatabase("default", "default", "default");

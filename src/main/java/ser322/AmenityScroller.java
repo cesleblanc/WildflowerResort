@@ -7,7 +7,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.Dimension;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,41 +15,37 @@ import java.util.Objects;
 
 import static main.java.ser322.DebugMode.debug;
 
-public class ReservationScroller {
+/**
+ * Amenity Table
+ */
+public class AmenityScroller {
     JTable table;
     DefaultTableModel model;
     public JScrollPane scrollPane;
-
-    private static final Object[] columns = new Object[] {"RESERVATIONID", "CARDNUM", "ROOMID", "PRICE", "STARTDATE", "ENDDATE"};
-    private static final int RESERVATIONID_INDEX = 0;
-    private static final int CARDNUM_INDEX = 1;
-    private static final int ROOMID_INDEX = 2;
-    private static final int PRICE_INDEX = 3;
-    private static final int STARTDATE_INDEX = 4;
-    private static final int ENDDATE_INDEX = 5;
+    private static final Object[] columns = new Object[] {"AMENITYID", "TYPE", "HOURS"};
+    private static final int AMENITYID_INDEX = 0;
+    private static final int TYPE_INDEX = 1;
+    private static final int HOURS_INDEX = 2;
 
     /**
      * Gets Data Amenity table from SQL request
-     * @param query sql parsed into Reservation Table
-     * @return array of sorted [rows]["RESERVATIONID", "CARDNUM", "ROOMID", "PRICE", "STARTDATE", "ENDDATE"]
+     * @param query sql parsed into Amenity Table
+     * @return arraylist of sorted [rows]["AMENITYID", "TYPE", "HOURS"]
      */
     static Object[][] getData(String query) {
         ArrayList<ArrayList<Object>> dataset = new ArrayList<>();
         PreparedStatement stmt = null;
         ResultSet resultSet = null;
+
         try {
             stmt = Objects.requireNonNull(Controller.getConnection()).prepareStatement(query);
             resultSet = stmt.executeQuery();
             ArrayList<Object> row = new ArrayList<>();
             while (resultSet.next()) {
-
-                row.add(0, resultSet.getInt("RESERVATIONID"));
-                debug("RESERVATIONID: " + row.get(0));
-                row.add(1, resultSet.getString("CARDNUM"));
-                row.add(2, resultSet.getInt("ROOMID"));
-                row.add(3, resultSet.getFloat("PRICE"));
-                row.add(4, resultSet.getDate("STARTDATE"));
-                row.add(5, resultSet.getDate("ENDDATE"));
+                row.add(0, resultSet.getInt("AMENITYID"));
+                debug("AMENITYID: " + row.get(0));
+                row.add(1, resultSet.getString("TYPE"));
+                row.add(2, resultSet.getString("HOURS"));
                 dataset.add(row);
                 row = new ArrayList<>();
             }
@@ -72,25 +67,17 @@ public class ReservationScroller {
      * Query and create table
      * @param query sql query
      */
-    ReservationScroller(String query) {
+    AmenityScroller(String query) {
         model = new DefaultTableModel(getData(query), columns){
             private static final long serialVersionUID = 1L;
 
             @Override
             public Class<?> getColumnClass(int index){
                 switch(getColumnName(index)) {
-                    case "RESERVATIONID":
-                        return Integer.class;
-                    case "CARDNUM":
+                    case "AMENITYID":
+                    case "TYPE":
+                    case "HOURS":
                         return String.class;
-                    case "ROOMID":
-                        return Integer.class;
-                    case "PRICE":
-                        return Float.class;
-                    case "STARTDATE":
-                        return Date.class;
-                    case "ENDDATE":
-                        return Date.class;
                 } return super.getColumnClass(index);
 
             }
@@ -110,29 +97,20 @@ public class ReservationScroller {
         headerLabel.setVerticalTextPosition(JLabel.CENTER);
         table.setRowHeight(25);
 
-        // Set column widths
-        table.getColumnModel().getColumn(RESERVATIONID_INDEX).setPreferredWidth(100);
-        table.getColumnModel().getColumn(CARDNUM_INDEX).setPreferredWidth(150);
-        table.getColumnModel().getColumn(ROOMID_INDEX).setPreferredWidth(75);
-        table.getColumnModel().getColumn(PRICE_INDEX).setPreferredWidth(75);
-        table.getColumnModel().getColumn(STARTDATE_INDEX).setPreferredWidth(125);
-        table.getColumnModel().getColumn(ENDDATE_INDEX).setPreferredWidth(125);
-
-
-        // Set cell justifications
-        DefaultTableCellRenderer right = new DefaultTableCellRenderer();
-        right.setHorizontalAlignment(JLabel.RIGHT);
+        // Justify all columns
         DefaultTableCellRenderer left = new DefaultTableCellRenderer();
         left.setHorizontalAlignment(JLabel.LEFT);
         DefaultTableCellRenderer center = new DefaultTableCellRenderer();
         center.setHorizontalAlignment(JLabel.CENTER);
 
-        table.getColumnModel().getColumn(RESERVATIONID_INDEX).setCellRenderer(center);
-        table.getColumnModel().getColumn(CARDNUM_INDEX).setCellRenderer(center);
-        table.getColumnModel().getColumn(ROOMID_INDEX).setCellRenderer(center);
-        table.getColumnModel().getColumn(PRICE_INDEX).setCellRenderer(center);
-        table.getColumnModel().getColumn(STARTDATE_INDEX).setCellRenderer(center);
-        table.getColumnModel().getColumn(ENDDATE_INDEX).setCellRenderer(center);
+        table.getColumnModel().getColumn(AMENITYID_INDEX).setCellRenderer(center);
+        table.getColumnModel().getColumn(TYPE_INDEX).setCellRenderer(center);
+        table.getColumnModel().getColumn(HOURS_INDEX).setCellRenderer(center);
+
+        // Set Column Widths
+        table.getColumnModel().getColumn(AMENITYID_INDEX).setPreferredWidth(100);
+        table.getColumnModel().getColumn(TYPE_INDEX).setPreferredWidth(200);
+        table.getColumnModel().getColumn(HOURS_INDEX).setPreferredWidth(100);
 
         // Don't let the table resize
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);

@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 
+import static main.java.ser322.DebugMode.debug;
+
 
 /**
  * The following class is used as a controller to the current resort database.
@@ -99,9 +101,9 @@ public class Controller {
             DB_URL = br.readLine();
             USER = br.readLine();
             PASS = br.readLine();
-            System.out.println("DATABASE URL: " + DB_URL);
-            System.out.println("USERNAME: " + USER);
-            System.out.println("PASSWORD: " + PASS);
+            debug("DATABASE URL: " + DB_URL);
+            debug("USERNAME: " + USER);
+            debug("PASSWORD: " + PASS);
         } catch (IOException e) {
             e.printStackTrace();
         }
