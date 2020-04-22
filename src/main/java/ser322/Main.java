@@ -22,16 +22,20 @@ public class Main   {
             USER = args[1];
             PASS = args[2];
 
-            System.out.println("Custom credentials input");
+            System.out.println("Custom credentials input:");
             System.out.println("\tURL:  " + DB_URL);
             System.out.println("\tUSER: " + USER);
             System.out.println("\tPASS: " + PASS + "\n");
 
+            Controller.initializeDatabase(DB_URL, USER, PASS);
+
         } else {
             System.out.println("Using default credentials");
+
+            // These defaults will be overwritten in the Controller.login method
+            Controller.initializeDatabase("default", "default", "default");
         }
 
-        Controller.initializeDatabase(DB_URL, USER, PASS);
 
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
