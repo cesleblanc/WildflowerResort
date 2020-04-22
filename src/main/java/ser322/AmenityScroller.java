@@ -13,6 +13,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * Amenity Table
+ */
 public class AmenityScroller {
     JTable table;
     DefaultTableModel model;
@@ -25,7 +28,7 @@ public class AmenityScroller {
     /**
      * Gets Data Amenity table from SQL request
      * @param query sql parsed into Amenity Table
-     * @return arraylist of sorted [[AMENITYID],[TYPE],[HOURS]]
+     * @return arraylist of sorted [rows]["AMENITYID", "TYPE", "HOURS"]
      */
     static Object[][] getData(String query) {
         ArrayList<ArrayList<Object>> dataset = new ArrayList<>();
@@ -58,6 +61,10 @@ public class AmenityScroller {
         return array;
     }
 
+    /**
+     * Query and create table
+     * @param query sql query
+     */
     AmenityScroller(String query) {
         model = new DefaultTableModel(getData(query), columns){
             private static final long serialVersionUID = 1L;
@@ -81,6 +88,7 @@ public class AmenityScroller {
             }
         };
 
+        // Set default cell values
         TableCellRenderer rendererFromHeader = table.getTableHeader().getDefaultRenderer();
         JLabel headerLabel = (JLabel) rendererFromHeader;
         headerLabel.setHorizontalAlignment(JLabel.CENTER);

@@ -22,7 +22,11 @@ public class GuestScroller {
     private static final int ID_INDEX = 0;
     private static final int PHONE_INDEX = 4;
 
-
+    /**
+     * Query GUEST table and create array
+     * @param query
+     * @return [rows]["GUESTID", "FIRSTNAME", "LASTNAME", "EMAIL", "PHONENUM"]
+     */
     static Object[][] getData(String query) {
         ArrayList<ArrayList<Object>> dataset = new ArrayList<>();
         PreparedStatement stmt = null;

@@ -24,6 +24,11 @@ public class RoomTypeScroller {
     private static final int ISSMOKING_INDEX = 3;
 
 
+    /**
+     * Query ROOMTYPE table and return 2d array of roomtype objects
+     * @param query sql query
+     * @return [rows]["ROOMID", "ROOMTYPE", "MAXOCCUPANCY", "ISSMOKING"]
+     */
     static Object[][] getData(String query) {
         ArrayList<ArrayList<Object>> dataset = new ArrayList<>();
         PreparedStatement stmt = null;
@@ -81,6 +86,7 @@ public class RoomTypeScroller {
             }
         };
 
+        // Set default cell values
         TableCellRenderer rendererFromHeader = table.getTableHeader().getDefaultRenderer();
         JLabel headerLabel = (JLabel) rendererFromHeader;
         headerLabel.setHorizontalAlignment(JLabel.CENTER);

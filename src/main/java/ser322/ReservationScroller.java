@@ -27,6 +27,11 @@ public class ReservationScroller {
     private static final int STARTDATE_INDEX = 4;
     private static final int ENDDATE_INDEX = 5;
 
+    /**
+     * Gets Data Amenity table from SQL request
+     * @param query sql parsed into Reservation Table
+     * @return array of sorted [rows]["RESERVATIONID", "CARDNUM", "ROOMID", "PRICE", "STARTDATE", "ENDDATE"]
+     */
     static Object[][] getData(String query) {
         ArrayList<ArrayList<Object>> dataset = new ArrayList<>();
         PreparedStatement stmt = null;
@@ -61,6 +66,10 @@ public class ReservationScroller {
         return array;
     }
 
+    /**
+     * Query and create table
+     * @param query sql query
+     */
     ReservationScroller(String query) {
         model = new DefaultTableModel(getData(query), columns){
             private static final long serialVersionUID = 1L;
@@ -91,6 +100,8 @@ public class ReservationScroller {
                 return new Dimension(table.getWidth(), 360);
             }
         };
+
+        // Set default cell values
         TableCellRenderer rendererFromHeader = table.getTableHeader().getDefaultRenderer();
         JLabel headerLabel = (JLabel) rendererFromHeader;
         headerLabel.setHorizontalAlignment(JLabel.CENTER);
