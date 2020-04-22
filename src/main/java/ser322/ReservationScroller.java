@@ -3,6 +3,7 @@ package main.java.ser322;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import java.awt.Dimension;
@@ -17,9 +18,14 @@ public class ReservationScroller {
     JTable table;
     DefaultTableModel model;
     public JScrollPane scrollPane;
-    private static final Object[] columns = new Object[] {"ID", "Card #", "Room ID", "Price", "Start Date", "End Date"};
-    private static final int ID_INDEX = 0;
-    private static final int CARD_INDEX = 1;
+
+    private static final Object[] columns = new Object[] {"RESERVATIONID", "CARDNUM", "ROOMID", "PRICE", "STARTDATE", "ENDDATE"};
+    private static final int RESERVATIONID_INDEX = 0;
+    private static final int CARDNUM_INDEX = 1;
+    private static final int ROOMID_INDEX = 2;
+    private static final int PRICE_INDEX = 3;
+    private static final int STARTDATE_INDEX = 4;
+    private static final int ENDDATE_INDEX = 5;
 
     static Object[][] getData(String query) {
         ArrayList<ArrayList<Object>> dataset = new ArrayList<>();
@@ -62,18 +68,18 @@ public class ReservationScroller {
             @Override
             public Class<?> getColumnClass(int index){
                 switch(getColumnName(index)) {
-                    case "ID":
+                    case "RESERVATIONID":
                         return Integer.class;
-                    case "Card #":
+                    case "CARDNUM":
                         return String.class;
-                    case "Room ID":
+                    case "ROOMID":
                         return Integer.class;
-                    case "Price":
+                    case "PRICE":
                         return Float.class;
-                    case "Start Date":
+                    case "STARTDATE":
                         return Date.class;
-                        case "End Date":
-                            return Date.class;
+                    case "ENDDATE":
+                        return Date.class;
                 } return super.getColumnClass(index);
 
             }
@@ -82,7 +88,7 @@ public class ReservationScroller {
         table = new JTable(model){
             @Override
             public Dimension getPreferredScrollableViewportSize() {
-                return new Dimension(table.getWidth(), 125);
+                return new Dimension(table.getWidth(), 360);
             }
         };
         TableCellRenderer rendererFromHeader = table.getTableHeader().getDefaultRenderer();
@@ -91,14 +97,32 @@ public class ReservationScroller {
         headerLabel.setVerticalTextPosition(JLabel.CENTER);
         table.setRowHeight(25);
 
-        // Make ID column less wide
-        table.getColumnModel().getColumn(ID_INDEX).setPreferredWidth(50);
+        // Set column widths
+        table.getColumnModel().getColumn(RESERVATIONID_INDEX).setPreferredWidth(100);
+        table.getColumnModel().getColumn(CARDNUM_INDEX).setPreferredWidth(150);
+        table.getColumnModel().getColumn(ROOMID_INDEX).setPreferredWidth(75);
+        table.getColumnModel().getColumn(PRICE_INDEX).setPreferredWidth(75);
+        table.getColumnModel().getColumn(STARTDATE_INDEX).setPreferredWidth(125);
+        table.getColumnModel().getColumn(ENDDATE_INDEX).setPreferredWidth(125);
 
-        // Make card column wider
-         table.getColumnModel().getColumn(CARD_INDEX).setPreferredWidth(150);
+
+        // Set cell justifications
+        DefaultTableCellRenderer right = new DefaultTableCellRenderer();
+        right.setHorizontalAlignment(JLabel.RIGHT);
+
+        DefaultTableCellRenderer left = new DefaultTableCellRenderer();
+        left.setHorizontalAlignment(JLabel.LEFT);
+
+        table.getColumnModel().getColumn(RESERVATIONID_INDEX).setCellRenderer(left);
+        table.getColumnModel().getColumn(CARDNUM_INDEX).setCellRenderer(left);
+        table.getColumnModel().getColumn(ROOMID_INDEX).setCellRenderer(left);
+        table.getColumnModel().getColumn(PRICE_INDEX).setCellRenderer(left);
+        table.getColumnModel().getColumn(STARTDATE_INDEX).setCellRenderer(left);
+        table.getColumnModel().getColumn(ENDDATE_INDEX).setCellRenderer(left);
 
         // Don't let the table resize
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
 
         // Add scroll bar to the table
         scrollPane = new JScrollPane(table);

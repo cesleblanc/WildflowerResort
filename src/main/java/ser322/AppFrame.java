@@ -21,11 +21,12 @@ public class AppFrame {
     JPanel roomPanel = initializeRoomPanel();
     JPanel amenityPanel = initializeAmenityPanel();
     static GuestScroller gs;
+    static ReservationScroller rs;
 
     AppFrame() {
         mainWindow = new JFrame(APPLICATION_NAME);
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainWindow.setSize(600, 500);
+        mainWindow.setSize(800, 500);
         mainWindow.setVisible(true);
         tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Guests", guestPanel);
@@ -80,9 +81,52 @@ public class AppFrame {
     }
 
     static JPanel initializeReservationPanel() {
-        ReservationScroller rs = new ReservationScroller("SELECT * FROM RESERVATION");
-        JPanel panel  = new JPanel();
-        panel.add(rs.scrollPane, BorderLayout.SOUTH);
+
+//        JPanel panel  = new JPanel();
+//        panel.add(rs.scrollPane, BorderLayout.SOUTH);
+//        return panel;
+
+        // Add scroll panel
+        GridBagLayout gbl = new GridBagLayout();
+        GridBagConstraints gbc = new GridBagConstraints();
+        JPanel panel  = new JPanel(gbl);
+
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        // Add search panel
+        JTextField textField = new JTextField();
+        textField.setMinimumSize(new Dimension(300, 25));
+        textField.setPreferredSize(new Dimension(300, 25));
+        JButton submit = new JButton("Submit");
+        JPanel searchPanel = new JPanel();
+        searchPanel.add(textField, BorderLayout.CENTER);
+        searchPanel.add(submit, BorderLayout.EAST);
+        panel.add(searchPanel, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 25;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        rs = new ReservationScroller("SELECT * FROM RESERVATION");
+        panel.add(rs.scrollPane, gbc);
+
+        // Add action listener to submit button
+        submit.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+                panel.remove(rs.scrollPane);
+                rs = new ReservationScroller(textField.getText());
+                System.out.println(textField.getText());
+                gbc.gridx = 0;
+                gbc.gridy = 25;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                panel.add(rs.scrollPane, gbc);
+                panel.repaint();
+                panel.revalidate();
+            }
+        });
         return panel;
     }
 

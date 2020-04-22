@@ -21,9 +21,6 @@ static final String CREATE_TABLE_RESERVATION_SQL = "sql/create_table_reservation
         Controller.createTable(conn, CREATE_TABLE_RESERVATION_SQL);
     }
 
-
-
-
     /**
      * Creates a new reservation in the Wildflower Resort Database
      * @param connection Connection to database
