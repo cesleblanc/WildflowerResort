@@ -13,6 +13,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import static main.java.ser322.DebugMode.debug;
+
 /**
  * Amenity Table
  */
@@ -41,7 +43,7 @@ public class AmenityScroller {
             ArrayList<Object> row = new ArrayList<>();
             while (resultSet.next()) {
                 row.add(0, resultSet.getInt("AMENITYID"));
-                System.out.println("AMENITYID: " + row.get(0));
+                debug("AMENITYID: " + row.get(0));
                 row.add(1, resultSet.getString("TYPE"));
                 row.add(2, resultSet.getString("HOURS"));
                 dataset.add(row);
@@ -53,7 +55,7 @@ public class AmenityScroller {
         }
 
         Object[][] array = new Object[dataset.size()][];
-        System.out.println("Data set size: " + dataset.size());
+        debug("Data set size: " + dataset.size());
         for (int i = 0; i < dataset.size(); i++) {
             ArrayList<Object> row = dataset.get(i);
             array[i] = row.toArray(new Object[0]);

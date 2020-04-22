@@ -12,6 +12,8 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import static main.java.ser322.DebugMode.debug;
+
 public class AppFrame {
     final String APPLICATION_NAME = "Windflower Resort Database System";
     JFrame mainWindow;
@@ -69,7 +71,7 @@ public class AppFrame {
             public void actionPerformed(final ActionEvent e) {
                 panel.remove(gs.scrollPane);
                 gs = new GuestScroller(textField.getText());
-                System.out.println(textField.getText());
+                debug(textField.getText());
                 gbc.gridx = 0;
                 gbc.gridy = 25;
                 gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -115,7 +117,7 @@ public class AppFrame {
             public void actionPerformed(final ActionEvent e) {
                 panel.remove(rs.scrollPane);
                 rs = new ReservationScroller(textField.getText());
-                System.out.println(textField.getText());
+                debug(textField.getText());
                 gbc.gridx = 0;
                 gbc.gridy = 25;
                 gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -159,7 +161,7 @@ public class AppFrame {
             public void actionPerformed(final ActionEvent e) {
                 panel.remove(rts.scrollPane);
                 rts = new RoomTypeScroller(textField.getText());
-                System.out.println(textField.getText());
+                debug(textField.getText());
                 gbc.gridx = 0;
                 gbc.gridy = 25;
                 gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -201,7 +203,7 @@ public class AppFrame {
             public void actionPerformed(final ActionEvent e) {
                 panel.remove(as.scrollPane);
                 as = new AmenityScroller(textField.getText());
-                System.out.println(textField.getText());
+                debug(textField.getText());
                 gbc.gridx = 0;
                 gbc.gridy = 25;
                 gbc.fill = GridBagConstraints.HORIZONTAL;

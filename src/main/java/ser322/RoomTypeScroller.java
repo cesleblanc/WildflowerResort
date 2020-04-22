@@ -1,5 +1,7 @@
 package main.java.ser322;
 
+import static main.java.ser322.DebugMode.debug;
+
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -40,7 +42,7 @@ public class RoomTypeScroller {
             ArrayList<Object> row = new ArrayList<>();
             while (resultSet.next()) {
                 row.add(0, resultSet.getInt("ROOMID"));
-                System.out.println("ROOMID: " + row.get(0));
+                debug("ROOMID: " + row.get(0));
                 row.add(1, resultSet.getString("ROOMTYPE"));
                 row.add(2, resultSet.getString("MAXOCCUPANCY"));
                 row.add(3, resultSet.getString("ISSMOKING"));
@@ -53,7 +55,7 @@ public class RoomTypeScroller {
         }
 
         Object[][] array = new Object[dataset.size()][];
-        System.out.println("Data set size: " + dataset.size());
+        debug("Data set size: " + dataset.size());
         for (int i = 0; i < dataset.size(); i++) {
             ArrayList<Object> row = dataset.get(i);
             array[i] = row.toArray(new Object[0]);

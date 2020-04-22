@@ -14,6 +14,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import static main.java.ser322.DebugMode.debug;
+
 public class ReservationScroller {
     JTable table;
     DefaultTableModel model;
@@ -43,7 +45,7 @@ public class ReservationScroller {
             while (resultSet.next()) {
 
                 row.add(0, resultSet.getInt("RESERVATIONID"));
-                System.out.println("RESERVATIONID: " + row.get(0));
+                debug("RESERVATIONID: " + row.get(0));
                 row.add(1, resultSet.getString("CARDNUM"));
                 row.add(2, resultSet.getInt("ROOMID"));
                 row.add(3, resultSet.getFloat("PRICE"));
@@ -58,7 +60,7 @@ public class ReservationScroller {
         }
 
         Object[][] array = new Object[dataset.size()][];
-        System.out.println("Data set size: " + dataset.size());
+        debug("Data set size: " + dataset.size());
         for (int i = 0; i < dataset.size(); i++) {
             ArrayList<Object> row = dataset.get(i);
             array[i] = row.toArray(new Object[0]);

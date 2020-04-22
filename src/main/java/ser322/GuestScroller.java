@@ -13,6 +13,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import static main.java.ser322.DebugMode.debug;
+
 public class GuestScroller {
     JTable table;
     DefaultTableModel model;
@@ -38,7 +40,7 @@ public class GuestScroller {
             while (resultSet.next()) {
 
                 row.add(0, resultSet.getInt("GUESTID"));
-                System.out.println("GUESTID: " + row.get(0));
+                debug("GUESTID: " + row.get(0));
                 row.add(1, resultSet.getString("FIRSTNAME"));
                 row.add(2, resultSet.getString("LASTNAME"));
                 row.add(3, resultSet.getString("EMAIL"));
@@ -52,7 +54,7 @@ public class GuestScroller {
         }
 
         Object[][] array = new Object[dataset.size()][];
-        System.out.println("Data set size: " + dataset.size());
+        debug("Data set size: " + dataset.size());
         for (int i = 0; i < dataset.size(); i++) {
             ArrayList<Object> row = dataset.get(i);
             array[i] = row.toArray(new Object[0]);
