@@ -3,9 +3,15 @@ Final Project for SER322
 
 ## How to run
 ```
+Compile:
 javac -cp lib/connector-8.0.19.jar -d bin/ src/main/java/ser322/*.java
 
+Run with input args:
 java -cp lib/connector-8.0.19.jar:bin/ main/java/ser322/Main URL USERNAME PASSWORD
+
+Run with args found in credentials.txt:
+java -cp lib/connector-8.0.19.jar:bin/ main/java/ser322/Main
+
 ```
 
 ## Application Domain and Description:
