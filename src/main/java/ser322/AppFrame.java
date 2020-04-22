@@ -22,6 +22,8 @@ public class AppFrame {
     JPanel amenityPanel = initializeAmenityPanel();
     static GuestScroller gs;
     static ReservationScroller rs;
+    static RoomTypeScroller rts;
+    static AmenityScroller as;
 
     AppFrame() {
         mainWindow = new JFrame(APPLICATION_NAME);
@@ -81,11 +83,6 @@ public class AppFrame {
     }
 
     static JPanel initializeReservationPanel() {
-
-//        JPanel panel  = new JPanel();
-//        panel.add(rs.scrollPane, BorderLayout.SOUTH);
-//        return panel;
-
         // Add scroll panel
         GridBagLayout gbl = new GridBagLayout();
         GridBagConstraints gbc = new GridBagConstraints();
@@ -131,11 +128,89 @@ public class AppFrame {
     }
 
     static JPanel initializeRoomPanel() {
-        return new JPanel();
+
+        // Add scroll panel
+        GridBagLayout gbl = new GridBagLayout();
+        GridBagConstraints gbc = new GridBagConstraints();
+        JPanel panel  = new JPanel(gbl);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        // Add search panel
+        JTextField textField = new JTextField();
+        textField.setMinimumSize(new Dimension(300, 25));
+        textField.setPreferredSize(new Dimension(300, 25));
+        JButton submit = new JButton("Submit");
+        JPanel searchPanel = new JPanel();
+        searchPanel.add(textField, BorderLayout.CENTER);
+        searchPanel.add(submit, BorderLayout.EAST);
+        panel.add(searchPanel, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 25;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        //gbc.gridwidth = 3;
+        rts = new RoomTypeScroller("SELECT * FROM ROOMTYPE");
+        panel.add(rts.scrollPane, gbc);
+        // Add action listener to submit button
+        submit.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+                panel.remove(rts.scrollPane);
+                rts = new RoomTypeScroller(textField.getText());
+                System.out.println(textField.getText());
+                gbc.gridx = 0;
+                gbc.gridy = 25;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                panel.add(rts.scrollPane, gbc);
+                panel.repaint();
+                panel.revalidate();
+            }
+        });
+        return panel;
     }
 
     static JPanel initializeAmenityPanel() {
-        return new JPanel();
+        // Add scroll panel
+        GridBagLayout gbl = new GridBagLayout();
+        GridBagConstraints gbc = new GridBagConstraints();
+        JPanel panel  = new JPanel(gbl);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+
+        // Add search panel
+        JTextField textField = new JTextField();
+        textField.setMinimumSize(new Dimension(300, 25));
+        textField.setPreferredSize(new Dimension(300, 25));
+        JButton submit = new JButton("Submit");
+        JPanel searchPanel = new JPanel();
+        searchPanel.add(textField, BorderLayout.CENTER);
+        searchPanel.add(submit, BorderLayout.EAST);
+        panel.add(searchPanel, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 25;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        as = new AmenityScroller("SELECT * FROM AMENITY");
+        panel.add(as.scrollPane, gbc);
+        // Add action listener to submit button
+        submit.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+                panel.remove(as.scrollPane);
+                as = new AmenityScroller(textField.getText());
+                System.out.println(textField.getText());
+                gbc.gridx = 0;
+                gbc.gridy = 25;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                panel.add(as.scrollPane, gbc);
+                panel.repaint();
+                panel.revalidate();
+            }
+        });
+        return panel;
     }
 
 }
