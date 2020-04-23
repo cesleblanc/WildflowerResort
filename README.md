@@ -1,5 +1,5 @@
 # Wildflower Resort
-Final Project for SER322
+Youtube link: https://youtu.be/SZQHkAeC_Dc
 
 ## How to run
 ```
