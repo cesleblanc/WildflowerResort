@@ -3,15 +3,22 @@ Final Project for SER322
 
 ## How to run
 ```
-Compile:
+1.) Run all queries in sql folder
+
+2.) Compile:
 javac -cp lib/connector-8.0.19.jar -d bin/ src/main/java/ser322/*.java
 
-Run with input args:
+3.a) Run with input args:
 java -cp lib/connector-8.0.19.jar:bin/ main/java/ser322/Main URL USERNAME PASSWORD
 
-Run with args found in credentials.txt:
+3.b) Run with args found in credentials.txt:
 java -cp lib/connector-8.0.19.jar:bin/ main/java/ser322/Main
 
+4.) Query tables - examples below
+SELECT * FROM GUEST WHERE GUESTID = 1
+SELECT * FROM RESERVATION WHERE PRICE < 200
+SELECT * FROM ROOMTYPE WHERE MAXOCCUPANCY < 10
+SELECT * FROM AMENITY WHERE TYPE = 'POOL'
 ```
 
 ## Application Domain and Description:
